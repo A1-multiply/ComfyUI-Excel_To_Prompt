@@ -1,32 +1,25 @@
 import os
-import sys
-import subprocess
 import importlib
 
-# ── 의존 패키지 자동 설치 (pandas, openpyxl) ─────────────────────────────────
-_REQUIRED = {
-    "pandas":  "pandas",
-    "openpyxl": "openpyxl",
-}
+# ── 의존 패키지 확인 (자동 설치 없음) ──────────────────────────────────────────
+# pandas / openpyxl이 없으면 ComfyUI Manager 또는 pip으로 직접 설치하세요:
+#   pip install -r requirements.txt
+_MISSING = []
+for _pkg in ("pandas", "openpyxl"):
+    try:
+        importlib.import_module(_pkg)
+    except ImportError:
+        _MISSING.append(_pkg)
 
-def _ensure_packages():
-    for import_name, pip_name in _REQUIRED.items():
-        try:
-            importlib.import_module(import_name)
-        except ImportError:
-            print(f"[ExcelPromptGenerator] '{pip_name}' not found. Installing...")
-            try:
-                subprocess.check_call(
-                    [sys.executable, "-m", "pip", "install", pip_name,
-                     "--quiet", "--no-warn-script-location"],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.STDOUT,
-                )
-                print(f"[ExcelPromptGenerator] '{pip_name}' installed successfully.")
-            except subprocess.CalledProcessError as e:
-                print(f"[ExcelPromptGenerator] ERROR: Failed to install '{pip_name}': {e}")
-
-_ensure_packages()
+if _MISSING:
+    _msg = (
+        f"[ExcelPromptGenerator] Required package(s) not found: {', '.join(_MISSING)}\n"
+        "  Please install dependencies manually:\n"
+        "    pip install -r requirements.txt\n"
+        "  Or use ComfyUI Manager → Install from Git URL."
+    )
+    print(_msg)
+    raise ImportError(_msg)
 
 import torch
 import pandas as pd
