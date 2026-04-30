@@ -1,0 +1,18 @@
+[project]
+name = "excel-to-prompt-a1"
+description = "Load prompts from Excel or CSV files into ComfyUI workflows."
+version = "1.0.0"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "pandas",
+    "openpyxl"
+]
+
+[project.urls]
+Repository = "https://github.com/A1-multiply/ComfyUI-Excel_To_Prompt"
+
+[tool.comfy]
+PublisherId = "a1-multiply"
+DisplayName = "Excel To Prompt A1"
+Icon = "https://avatars.githubusercontent.com/u/256969083?v=4&size=400"
